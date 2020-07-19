@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { categoryTypes, alphaTypes } from '../../api/config';
 import Horizen from '../../baseUI/horizen-item/index';
@@ -10,6 +10,8 @@ import {
     changePageCount,
     changePullUpLoading,
     changePullDownLoading,
+    changeCategory, 
+    changeAlpha,
     getHotSingerList,
     refreshMoreHotSingerList,
     getSingerList,
@@ -26,8 +28,8 @@ function Singers(props) {
         }
     }); */
 
-    const { singerList, pullUpLoading, pullDownLoading, pageCount } = props;
-    const { getHotSingerDispatch, updateDispatch, pullUpRefreshDispatch, pullDownRefreshDispatch } = props;
+    const { singerList, pullUpLoading, pullDownLoading, pageCount, category, alpha } = props;
+    const { getHotSingerDispatch,  updateCatecory, updateAlpha, pullUpRefreshDispatch, pullDownRefreshDispatch } = props;
 
     useEffect(() => {
         if (!singerList.size) {
@@ -59,17 +61,14 @@ function Singers(props) {
         )
     };
 
-    let [category, setCategory] = useState('');
-    let [alpha, setAlpha] = useState('');
-
-    let handleUpdateAlpha = (val) => {
-        setAlpha(val);
-        updateDispatch(category, val);
+    let handleUpdateAlpha = (newVal) => {
+        if(category === newVal) return;
+        updateAlpha(newVal)
     }
 
-    let handleUpdateCatetory = (val) => {
-        setCategory(val);
-        updateDispatch(val, alpha);
+    let handleUpdateCatetory = (newVal) => {
+        if(alpha === newVal) return;
+        updateCatecory(newVal)
     }
 
     const handlePullUp = () => {
@@ -104,7 +103,9 @@ const mapStateToProps = (state) => ({
     enterLoading: state.getIn(['singers', 'enterLoading']),     //控制进场Loading
     pullUpLoading: state.getIn(['singers', 'pullUpLoading']),   //控制上拉加载动画
     pullDownLoading: state.getIn(['singers', 'pullDownLoading']), //控制下拉加载动画
-    pageCount: state.getIn(['singers', 'pageCount'])
+    pageCount: state.getIn(['singers', 'pageCount']),
+    category: state.getIn(['singers', 'category']),
+    alpha: state.getIn(['singers', 'alpha']),
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -112,11 +113,17 @@ const mapDispatchToProps = (dispatch) => {
         getHotSingerDispatch() {
             dispatch(getHotSingerList())
         },
-        // 点击不同分类重新请求数据
-        updateDispatch(category, alpha) {
+        updateCatecory(category) {
+            dispatch(changeCategory(category));
             dispatch(changePageCount(0));//由于改变了分类，所以pageCount清零
             dispatch(changeEnterLoading(true));//loading，现在实现控制逻辑，效果实现放到下一节，后面的loading同理
-            dispatch(getSingerList(category, alpha));
+            dispatch(getSingerList());
+        },
+        updateAlpha(alpha) {
+            dispatch(changeAlpha(alpha));
+            dispatch(changePageCount(0));//由于改变了分类，所以pageCount清零
+            dispatch(changeEnterLoading(true));//loading，现在实现控制逻辑，效果实现放到下一节，后面的loading同理
+            dispatch(getSingerList());
         },
         // 滑到最底部刷新部分的处理
         pullUpRefreshDispatch(category, alpha, hot, count) { // category, alpha, hot, count参数的含义

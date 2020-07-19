@@ -6,7 +6,9 @@ const defaultState = fromJS({
   enterLoading: true,     //控制进场Loading
   pullUpLoading: false,   //控制上拉加载动画
   pullDownLoading: false, //控制下拉加载动画
-  pageCount: 0            //这里是当前页数，我们即将实现分页功能
+  pageCount: 0,           //这里是当前页数，我们即将实现分页功能
+  category: "",           //默认分类的key => 1001、1002、1003等
+  alpha: "",              //首字母的key => A、B、C等
 })
 
 export default (state = defaultState, action) => {
@@ -21,6 +23,10 @@ export default (state = defaultState, action) => {
       return state.set('pullUpLoading', action.data);
     case actionTypes.CHANGE_PULLDOWN_LOADING:
       return state.set('pullDownLoading', action.data);
+    case actionTypes.CHANGE_CATEGORY:
+      return state.set('category', action.data);
+    case actionTypes.CHANGE_ALPHA:
+      return state.set('alpha', action.data);
     default:
       return defaultState;
   }
