@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { renderRoutes } from 'react-router-config';
 import Slider from '../../components/slider/index';
 import * as actionTypes from './store/actionCreator';
 import RecommendList from '../../components/list/index';
@@ -52,6 +53,7 @@ function Recommend(props) {
                 </div>
             </Scroll>
             {enterLoading ? <Loading></Loading> : null}
+            {renderRoutes(props.route.routes)}
         </Content>
     )
 }

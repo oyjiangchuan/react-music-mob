@@ -4,6 +4,7 @@ import Home from '../pages/Home/index';
 import Recommend from '../pages/Recommend/index';
 import Singers from '../pages/Singers/index';
 import Rank from '../pages/Rank/index';
+import Album from '../pages/Album/index';
 export default [
   {
     path: "/",
@@ -18,7 +19,13 @@ export default [
       },
       {
         path: "/recommend",
-        component: Recommend
+        component: Recommend,
+        routes: [
+          {
+            path: "/recommend/:id",
+            component: Album
+          }
+        ]
       },
       {
         path: "/singers",
