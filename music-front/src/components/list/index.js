@@ -3,10 +3,11 @@ import { ListWrapper, List, ListItem } from './style';
 import { getCount } from '../../api/utils';
 import LazyLoad from "react-lazyload";
 import { withRouter } from 'react-router-dom';
-
+/* 这里List组件作为Recommend的子组件，并不能从props拿到history变量，无法跳转路由。有两种解决方法：
+1、将Recommend组件中props对象中的history属性传给List组件
+2、将List组件用withRouter包裹 */
 function RecommendList(props) {
   const { recommendList } = props;
-  // console.log(recommendList)
   const enterDetail = (id) => {
     props.history.push(`/recommend/${id}`)
   }

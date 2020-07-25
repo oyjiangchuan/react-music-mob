@@ -19,7 +19,6 @@ const changeLoading = (data) => ({
 export const getRankList = () => {
   return dispatch => {
     getRankListRequest().then(data => {
-      console.log(data)
       let list = data && data.list;
       dispatch(changeRankList(list));
       dispatch(changeLoading(false));
