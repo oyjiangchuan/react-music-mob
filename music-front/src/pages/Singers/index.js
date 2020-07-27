@@ -5,12 +5,13 @@ import Horizen from '../../baseUI/horizen-item/index';
 import { NavContainer, List, ListItem, ListContainer } from './style';
 import Scroll from '../../baseUI/scroll/index';
 import LazyLoad, { forceCheck } from 'react-lazyload';
+import { renderRoutes } from 'react-router-config';
 import {
     changeEnterLoading,
     changePageCount,
     changePullUpLoading,
     changePullDownLoading,
-    changeCategory, 
+    changeCategory,
     changeAlpha,
     getHotSingerList,
     refreshMoreHotSingerList,
@@ -29,7 +30,7 @@ function Singers(props) {
     }); */
 
     const { singerList, pullUpLoading, pullDownLoading, pageCount, category, alpha } = props;
-    const { getHotSingerDispatch,  updateCatecory, updateAlpha, pullUpRefreshDispatch, pullDownRefreshDispatch } = props;
+    const { getHotSingerDispatch, updateCatecory, updateAlpha, pullUpRefreshDispatch, pullDownRefreshDispatch } = props;
 
     useEffect(() => {
         if (!singerList.size) {
@@ -39,6 +40,7 @@ function Singers(props) {
     }, [])
 
     const singerListJS = singerList ? singerList.toJS() : []
+    console.log(singerListJS)
     // 渲染函数，返回歌手列表
     const renderSingerList = () => {
         return (
@@ -46,7 +48,7 @@ function Singers(props) {
                 {
                     singerListJS.map((item, index) => {
                         return (
-                            <ListItem key={item.accountId + "" + index}>
+                            <ListItem key={item.accountId + "" + index} onClick={() => { enterDetail(item.id) }}>
                                 <div className="img_wrapper">
                                     <LazyLoad placeholder={<img width="100%" height="100%" src={require('./singer.png')} alt="music" />}>
                                         <img src={`${item.picUrl}?param=300*300`} width="100%" height="100%" alt="music" />
@@ -62,12 +64,12 @@ function Singers(props) {
     };
 
     let handleUpdateAlpha = (newVal) => {
-        if(category === newVal) return;
+        if (category === newVal) return;
         updateAlpha(newVal)
     }
 
     let handleUpdateCatetory = (newVal) => {
-        if(alpha === newVal) return;
+        if (alpha === newVal) return;
         updateCatecory(newVal)
     }
 
@@ -77,6 +79,10 @@ function Singers(props) {
 
     const handlePullDown = () => {
         pullDownRefreshDispatch(category, alpha);
+    };
+
+    const enterDetail = (id) => {
+        props.history.push(`/singers/${id}`);
     };
 
     return (
@@ -94,6 +100,7 @@ function Singers(props) {
                     {renderSingerList()}
                 </Scroll>
             </ListContainer>
+            {renderRoutes(props.route.routes)}
         </div>
     )
 }
