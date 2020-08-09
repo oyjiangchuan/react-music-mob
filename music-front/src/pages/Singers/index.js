@@ -40,7 +40,6 @@ function Singers(props) {
     }, [])
 
     const singerListJS = singerList ? singerList.toJS() : []
-    console.log(singerListJS)
     // 渲染函数，返回歌手列表
     const renderSingerList = () => {
         return (
