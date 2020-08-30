@@ -24,7 +24,6 @@ function Rank(props) {
     }, []);
 
     const enterDetail = (detail) => {
-        console.log(detail)
         props.history.push(`/rank/${detail.id}`)
     }
 
