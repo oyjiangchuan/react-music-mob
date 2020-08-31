@@ -44,4 +44,33 @@ const getName = list => {
 // 判断一个对象是否为空
 export const isEmptyObject = obj => !obj || Object.keys(obj).length === 0;
 
-export { getCount, debounce, filterIndex, getName };
+// 给 css3 相关属性增加浏览器前缀，处理浏览器兼容性问题
+let elementStyle = document.createElement("div").style;
+
+// 通过 transition 属性判断是何种浏览器
+let vendor = (() => {
+  let transformNames = {
+    webkit: "webkitTransform",
+    Moz: "MozTransform",
+    O: "OTransfrom",
+    ms: "msTransform",
+    standard: "Transform"
+  };
+  for (let key in transformNames) {
+    if (elementStyle[transformNames[key]] !== undefined) {
+      return key;
+    }
+  }
+  return false;
+})();
+
+const prefixStyle = (style) => {
+  if (vendor === false) {
+    return false;
+  }
+  if (vendor === "standard") {
+    return style;
+  }
+  return vendor + style.charAt(0).toUpperCase() + style.substr(1);
+}
+export { getCount, debounce, filterIndex, getName, prefixStyle };
