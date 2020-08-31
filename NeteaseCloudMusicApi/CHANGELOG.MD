@@ -1,4 +1,33 @@
 # 更新日志
+### 3.39.0 | 2020.08.23
+- 新增`cloudsearch`接口[#893](https://github.com/Binaryify/NeteaseCloudMusicApi/issues/893)
+- `mv 地址`接口修改分辨率参数 [#883](https://github.com/Binaryify/NeteaseCloudMusicApi/issues/883)
+- 修复新碟上架接口分页问题 [#892](https://github.com/Binaryify/NeteaseCloudMusicApi/issues/892)
+
+### 3.38.0 | 2020.08.09
+- 新增`歌曲楼层评论`,`歌手全部歌曲`接口 [#864](https://github.com/Binaryify/NeteaseCloudMusicApi/issues/864) [#867](https://github.com/Binaryify/NeteaseCloudMusicApi/issues/867)
+- 支持收藏VIP或付费歌曲到歌单 [#860](https://github.com/Binaryify/NeteaseCloudMusicApi/issues/860)
+- 支持手动传入`realIP` [#863](https://github.com/Binaryify/NeteaseCloudMusicApi/pull/863)
+
+### 3.37.2 | 2020.08.04
+- 修复依赖问题
+
+### 3.37.0 | 2020.08.03
+- 新增`更新头像`,`歌单封面上传`接口和相关例子 [#403](https://github.com/Binaryify/NeteaseCloudMusicApi/issues/403) [#857](https://github.com/Binaryify/NeteaseCloudMusicApi/issues/857)
+- 加入`axios`依赖
+
+### 3.36.0 | 2020.07.26
+- 新增`全部新碟`,`数字专辑-新碟上架`,`数字专辑&数字单曲-榜单`,`数字专辑-语种风格馆`,`数字专辑详情`接口 [#852](https://github.com/Binaryify/NeteaseCloudMusicApi/issues/852)
+- 更新`新碟上架`接口,修改传入参数,返回数据结构有变化
+
+### 3.35.0 | 2020.07.18
+- 新增`首页-发现`,`首页-发现-圆形图标入口列表`接口 [#851](https://github.com/Binaryify/NeteaseCloudMusicApi/pull/851)
+
+### 3.34.2 | 2020.07.13
+- 修复`获取用户播放记录`接口参数错误问题 [#849](https://github.com/Binaryify/NeteaseCloudMusicApi/pull/849)
+
+- 增加`国家编码列表`接口 [#841](https://github.com/Binaryify/NeteaseCloudMusicApi/pull/841)
+
 ### 3.34.1 | 2020.07.06
 - 登录接口增加 `md5_password` 参数 [#839](https://github.com/Binaryify/NeteaseCloudMusicApi/issues/839)
 
