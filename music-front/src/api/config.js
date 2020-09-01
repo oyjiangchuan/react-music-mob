@@ -15,7 +15,7 @@ axiosInstance.interceptors.response.use(
 );
 
 // 歌手种类
-const categoryTypes = [{
+export const categoryTypes = [{
   name: "华语男",
   key: "1001"
 },
@@ -78,7 +78,7 @@ const categoryTypes = [{
 ];
 
 // 歌手首字母
-const alphaTypes = [{
+export const alphaTypes = [{
   key: "A",
   name: "A"
 },
@@ -194,4 +194,4 @@ export const playMode = {
 //顶部的高度
 export const HEADER_HEIGHT = 45;
 
-export { axiosInstance, categoryTypes, alphaTypes }
+export { axiosInstance };

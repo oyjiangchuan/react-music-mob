@@ -2,21 +2,24 @@ import React, { useRef } from 'react';
 import { getName } from '../../../api/utils';
 import animations from 'create-keyframe-animation';
 import { CSSTransition } from "react-transition-group";
-import { prefixStyle } from '../../../api/utils';
+import { prefixStyle, formatPlayTime } from '../../../api/utils';
+import ProgressBar from "../../../baseUI/progress-bar/index";
+import { playMode } from '../../../api/config';
 import {
   NormalPlayerContainer,
   Top,
   Middle,
   Bottom,
   Operators,
+  ProgressWrapper,
   CDWrapper
 } from './style';
 
 function NormalPlayer(props) {
   const normalPlayerRef = useRef();
   const cdWrapperRef = useRef();
-  const { song, fullScreen } = props;
-  const { toggleFullScreen } = props;
+  const { song, fullScreen, playing, percent, duration, currentTime, mode } = props;
+  const { toggleFullScreen, clickPlaying, onProgressChange, handlePrev, handleNext, changeMode } = props;
   const transform = prefixStyle("transform");
   // 启用帧动画
   const enter = () => {
@@ -73,7 +76,6 @@ function NormalPlayer(props) {
     const { x, y, scale } = _getPosAndScale();
     cdWrapperDom.style[transform] = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
   };
-
   const afterLeave = () => {
     if (!cdWrapperRef.current) return;
     const cdWrapperDom = cdWrapperRef.current;
@@ -83,6 +85,17 @@ function NormalPlayer(props) {
     // 不置为 none 现在全屏播放器页面还是存在
     normalPlayerRef.current.style.display = "none";
   };
+  const getPlayMode = () => {
+    let content;
+    if (mode === playMode.sequence) {
+      content = "&#xe625;";
+    } else if (mode === playMode.loop) {
+      content = "&#xe653;";
+    } else {
+      content = "&#xe61b;"
+    }
+    return content;
+  }
   return (
     <CSSTransition
       classNames="normal"
@@ -109,22 +122,38 @@ function NormalPlayer(props) {
         <Middle>
           <CDWrapper ref={cdWrapperRef}>
             <div className="cd">
-              <img className="image play" src={song.al.picUrl + "?param=400*400"} alt="" />
+              <img className={`image play ${playing ? "" : "pause"}`} src={song.al.picUrl + "?param=400*400"} alt="" />
             </div>
           </CDWrapper>
         </Middle>
         <Bottom className="bottom">
-          <Operators>
-            <div className="icon i-left" >
-              <i className="iconfont">&#xe625;</i>
+          <ProgressWrapper>
+            <span className="time time-l">{formatPlayTime(currentTime)}</span>
+            <div className="progress-bar-wrapper">
+              <ProgressBar percent={percent} percentChange={onProgressChange}></ProgressBar>
             </div>
-            <div className="icon i-left">
+            <div className="time time-r">{formatPlayTime(duration)}</div>
+          </ProgressWrapper>
+          <Operators>
+            <div className="icon i-left" onClick={changeMode}>
+              <i
+                className="iconfont"
+                dangerouslySetInnerHTML={{ __html: getPlayMode() }}
+              ></i>
+            </div>
+            <div className="icon i-left" onClick={handlePrev}>
               <i className="iconfont">&#xe6e1;</i>
             </div>
             <div className="icon i-center">
-              <i className="iconfont">&#xe723;</i>
+              <i
+                className="iconfont"
+                onClick={e => clickPlaying(e, !playing)}
+                dangerouslySetInnerHTML={{
+                  __html: playing ? "&#xe723;" : "&#xe731;"
+                }}
+              ></i>
             </div>
-            <div className="icon i-right">
+            <div className="icon i-right" onClick={handleNext}>
               <i className="iconfont">&#xe718;</i>
             </div>
             <div className="icon i-right">

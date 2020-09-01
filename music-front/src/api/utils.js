@@ -1,4 +1,4 @@
-const getCount = (count) => {
+export const getCount = (count) => {
   if (count < 0) return;
   if (count < 10000) {
     return count;
@@ -9,7 +9,7 @@ const getCount = (count) => {
   }
 }
 // 防抖函数
-const debounce = (fn, delay) => {
+export const debounce = (fn, delay) => {
   let timer;
   return function (...args) { // 这里拿到args是fn中输入的参数
     if (timer) {
@@ -23,7 +23,7 @@ const debounce = (fn, delay) => {
 };
 
 // 处理数据，找出第一个没有歌名的排行榜的索引
-const filterIndex = rankList => {
+export const filterIndex = rankList => {
   for (let i = 0; i < rankList.length - 1; i++) {
     if (rankList[i].tracks.length && !rankList[i + 1].tracks.length) {
       return i + 1;
@@ -32,7 +32,7 @@ const filterIndex = rankList => {
 };
 
 // 处理歌手列表拼接歌手名字
-const getName = list => {
+export const getName = list => {
   let str = "";
   list.map((item, index) => {
     str += index === 0 ? item.name : "/" + item.name;
@@ -64,7 +64,7 @@ let vendor = (() => {
   return false;
 })();
 
-const prefixStyle = (style) => {
+export const prefixStyle = (style) => {
   if (vendor === false) {
     return false;
   }
@@ -73,4 +73,42 @@ const prefixStyle = (style) => {
   }
   return vendor + style.charAt(0).toUpperCase() + style.substr(1);
 }
-export { getCount, debounce, filterIndex, getName, prefixStyle };
+
+//拼接出歌曲的url链接
+export const getSongUrl = id => {
+  return `https://music.163.com/song/media/outer/url?id=${id}.mp3`;
+};
+
+//转换歌曲播放时间
+export const formatPlayTime = interval => {
+  interval = interval | 0; // |0表示向下取整
+  const minute = (interval / 60) | 0;
+  const second = (interval % 60).toString().padStart(2, "0");
+  return `${minute}:${second}`;
+};
+
+// 找到当前歌曲的索引
+export const findIndex = (song, list) => {
+  return list.findIndex(item => {
+    return song.id === item.id;
+  })
+}
+
+// 随机算法
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+export const shuffle = (arr) => {
+  let new_arr = [];
+  arr.forEach(item => {
+    new_arr.push(item);
+  })
+  for (let i = 0; i < new_arr.length; i++) {
+    let j = getRandomInt(0, i);
+    let t = new_arr[i];
+    new_arr[i] = new_arr[j];
+    new_arr[j] = t;
+  }
+  return new_arr;
+}

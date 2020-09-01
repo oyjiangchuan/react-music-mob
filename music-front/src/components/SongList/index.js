@@ -5,8 +5,8 @@ import { getName } from "../../api/utils"
 const SongsList = React.forwardRef((props, refs) => {
   const { collectCount, showCollect, songs } = props;
   const totalCount = songs.length;
-  const selectItem = (e, index) => {
-    console.log(index)
+  const selectItem = (e, id) => {
+    console.log(id)
   };
 
   let songList = (list) => {
@@ -14,7 +14,7 @@ const SongsList = React.forwardRef((props, refs) => {
     for (let i = 0; i < list.length; i++) {
       let item = list[i];
       res.push(
-        <li key={item.id} onClick={(e) => selectItem(e, i)}>
+        <li key={item.id} onClick={(e) => selectItem(e, item.id)}>
           <span className="index">{i + 1}</span>
           <div className="info">
             <span>{item.name}</span>

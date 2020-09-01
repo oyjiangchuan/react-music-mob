@@ -9,6 +9,7 @@ import {
   SET_SHOW_PLAYLIST,
 } from './constants';
 import { fromJS } from 'immutable';
+import { getSongDetailRequest } from '../../../api/request';
 
 export const changeCurrentSong = (data) => ({
   type: SET_CURRENT_SONG,
@@ -49,3 +50,13 @@ export const changeShowPlayList = (data) => ({
   type: SET_SHOW_PLAYLIST,
   data
 });
+
+
+export const getSongDetail = (id) => {
+  return (dispatch) => {
+    getSongDetailRequest(id).then(data => {
+      let song = data.songs[0];
+      // dispatch(insertSong(song));
+    })
+  }
+}
