@@ -10,7 +10,6 @@ import {
   changePlayList,
   changePlayMode,
   changePlayingState,
-  changeSequecePlayList,
   changeShowPlayList
 } from './store/actionCreators';
 import Toast from '../../baseUI/toast/index';
@@ -113,11 +112,7 @@ function Player(props) {
       handleNext();
     }
   }
-  // 先mock一份currentIndex
-  useEffect(() => {
-    changeCurrentIndexDispatch(0); //currentIndex默认为-1，临时改成0
-  }, [])
-  // 根据playList和currentIndex播放歌曲
+  
   useEffect(() => {
     if (
       !playList.length ||
@@ -139,6 +134,7 @@ function Player(props) {
     setDuration((current.dt / 1000) | 0);//时长 |0表示向下取整(位运算符)
     // eslint-disable-next-line
   }, [playList, currentIndex]);
+
   // 根据playing切换音乐(audio标签)播放和暂停
   useEffect(() => {
     playing ? audioRef.current.play() : audioRef.current.pause();

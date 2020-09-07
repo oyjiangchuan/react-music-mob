@@ -7,6 +7,8 @@ import {
   SET_PLAYLIST,
   SET_PLAY_MODE,
   SET_SHOW_PLAYLIST,
+  SET_INSERT_SONG,
+  SET_DELETE_SONG
 } from './constants';
 import { fromJS } from 'immutable';
 import { getSongDetailRequest } from '../../../api/request';
@@ -51,12 +53,22 @@ export const changeShowPlayList = (data) => ({
   data
 });
 
+export const insertSong = (data) => ({
+  type: SET_INSERT_SONG,
+  data
+})
+
+export const deleteSong = (data) => ({
+  type: SET_DELETE_SONG,
+  data
+})
 
 export const getSongDetail = (id) => {
   return (dispatch) => {
     getSongDetailRequest(id).then(data => {
       let song = data.songs[0];
-      // dispatch(insertSong(song));
+      console.log(song)
+      dispatch(insertSong(song));
     })
   }
 }

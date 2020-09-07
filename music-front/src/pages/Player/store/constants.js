@@ -6,3 +6,5 @@ export const SET_SEQUECE_PLAYLIST = 'player/SET_SEQUECE_PLAYLIST';
 export const SET_PLAYLIST = 'player/SET_PLAYLIST';
 export const SET_PLAY_MODE = 'player/SET_PLAY_MODE';
 export const SET_SHOW_PLAYLIST = 'player/SET_SHOW_PLAYLIST';
+export const SET_INSERT_SONG = 'player/SET_INSERT_SONG';
+export const SET_DELETE_SONG = 'player/SET_DELETE_SONG';

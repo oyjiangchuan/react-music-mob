@@ -1,20 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { SongList, SongItem } from "./style";
-import { getName } from "../../api/utils"
+import { getName } from "../../api/utils";
+import { changePlayList, changeCurrentIndex, changeSequecePlayList } from "../../pages/Player/store/actionCreators";
+import { connect } from 'react-redux';
 
 const SongsList = React.forwardRef((props, refs) => {
-  const { collectCount, showCollect, songs } = props;
+
+  const [startIndex, setStartIndex] = useState(0);
+
+  const { collectCount, showCollect, songs, loading=false} = props;
+
+  const { changePlayListDispatch, changeCurrentIndexDispatch, changeSequecePlayListDispatch } = props;
+
   const totalCount = songs.length;
-  const selectItem = (e, id) => {
-    console.log(id)
+
+  const selectItem = (e, index) => {
+    // changePlayListDispatch(songs);
+    // changeSequecePlayListDispatch(songs);
+    // changeCurrentIndexDispatch(index);
   };
+
+  // useEffect(() => {
+  //   if(!loading) return;
+  //   if(startIndex + 1 + ONE_PAGE_COUNT >= totalCount)
+  //     return;
+  //   setStartIndex(startIndex + ONE_PAGE_COUNT);
+  // }, [loading, startIndex, totalCount]);
 
   let songList = (list) => {
     let res = [];
     for (let i = 0; i < list.length; i++) {
       let item = list[i];
       res.push(
-        <li key={item.id} onClick={(e) => selectItem(e, item.id)}>
+        <li key={item.id} onClick={(e) => selectItem(e, i)}>
           <span className="index">{i + 1}</span>
           <div className="info">
             <span>{item.name}</span>
@@ -53,4 +71,25 @@ const SongsList = React.forwardRef((props, refs) => {
   )
 })
 
-export default React.memo(SongsList);
+const mapStateToProps = (state) => ({
+  fullScreen: state.getIn(["player", "fullScreen"]),
+  playing: state.getIn(["player", "playing"]),
+  currentSong: state.getIn(["player", "currentSong"]),
+  // scrollY: state.getIn("album", "scrollY")
+});
+
+const mapDisPatchToProps = (dispatch) => {
+  return {
+    changePlayListDispatch(data){
+      dispatch(changePlayList(data));
+    },
+    changeCurrentIndexDispatch(data) {
+      dispatch(changeCurrentIndex(data));
+    },
+    changeSequecePlayListDispatch(data) {
+      dispatch(changeSequecePlayList(data))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDisPatchToProps)(React.memo(SongsList));
