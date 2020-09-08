@@ -6,6 +6,7 @@ import Header from "../../baseUI/header/index";
 import SongList from "../../components/SongList/index";
 import Scroll from "../../baseUI/scroll/index";
 import Loading from "./../../baseUI/loading/index";
+import MusicNote from "../../baseUI/music-note/index";
 import { HEADER_HEIGHT } from "./../../api/config";
 import { getSingerInfo, changeEnterLoading } from './store/actionCreators';
 
@@ -25,6 +26,7 @@ function Singer(props) {
   const songScroll = useRef();
   const header = useRef();
   const layer = useRef();
+  const musicNoteRef = useRef();
   // 图片初始高度
   const initialHeight = useRef(0);
 
@@ -89,6 +91,11 @@ function Singer(props) {
     setShowStatus(false);
   }, []);
 
+  // MusicNote组件中的startAnimation方法
+  const musicAnimation = (x, y) => {
+    musicNoteRef.current.startAnimation({ x, y });
+  };
+
   return (
     <CSSTransition
       in={showStatus}
@@ -113,7 +120,7 @@ function Singer(props) {
         </CollectButton>
         <BgLayer ref={layer}></BgLayer>
         <SongListWrapper ref={songScrollWrapper}>
-          <Scroll ref={songScroll} onScroll={handleScroll}>
+          <Scroll ref={songScroll} onScroll={handleScroll} musicAnimation={musicAnimation}>
             <SongList
               songs={songs}
               showCollect={false}>
@@ -121,6 +128,7 @@ function Singer(props) {
           </Scroll>
         </SongListWrapper>
         { loading ? (<Loading></Loading>) : null}
+        <MusicNote ref={musicNoteRef}></MusicNote>
       </Container>
     </CSSTransition>
   )

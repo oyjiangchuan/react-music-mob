@@ -12,12 +12,16 @@ const SongsList = React.forwardRef((props, refs) => {
 
   const { changePlayListDispatch, changeCurrentIndexDispatch, changeSequecePlayListDispatch } = props;
 
+  // 接受触发动画的函数
+  const { musicAnimation } = props;
+
   const totalCount = songs.length;
 
   const selectItem = (e, index) => {
-    // changePlayListDispatch(songs);
-    // changeSequecePlayListDispatch(songs);
-    // changeCurrentIndexDispatch(index);
+    changePlayListDispatch(songs);
+    changeSequecePlayListDispatch(songs);
+    changeCurrentIndexDispatch(index);
+    musicAnimation(e.nativeEvent.clientX, e.nativeEvent.clientY);
   };
 
   // useEffect(() => {

@@ -6,6 +6,7 @@ import { Container, TopDesc, Menu } from './style';
 import style from "../../assets/global-style";
 import Scroll from '../../baseUI/scroll/index';
 import Loading from '../../baseUI/loading/index';
+import MusicNote from "../../baseUI/music-note/index";
 import { isEmptyObject } from './../../api/utils';
 import { getAlbumList, changeEnterLoading } from './store/actionCreators';
 import SongList from "../../components/SongList/index";
@@ -26,6 +27,7 @@ function Album(props) {
   const [title, setTitle] = useState("歌单");
   const [isMarquee, setIsMarquee] = useState(false);// 是否跑马灯
   const headerEl = useRef();
+  const musicNoteRef = useRef();
   const handleBack = useCallback(() => {
     setShowStatus(false);
   }, [])
@@ -47,6 +49,10 @@ function Album(props) {
     }
   }, [currentAlbum]);
 
+  // MusicNote组件中的startAnimation方法
+  const musicAnimation = (x, y) => {
+    musicNoteRef.current.startAnimation({ x, y });
+  };
   // 组件模板
   const renderTopDesc = () => {
     return (
@@ -100,12 +106,13 @@ function Album(props) {
             <div>
               {renderTopDesc()}
               {renderMenu()}
-              <SongList songs={currentAlbum.tracks} showCollect={false}>
+              <SongList songs={currentAlbum.tracks} showCollect={false} musicAnimation={musicAnimation}>
               </SongList>
             </div>
           </Scroll>
         ) : null}
         {enterLoading ? <Loading></Loading> : null}
+        <MusicNote ref={musicNoteRef}></MusicNote>
       </Container>
     </CSSTransition>
   )
