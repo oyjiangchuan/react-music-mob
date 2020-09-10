@@ -17,6 +17,7 @@ function Album(props) {
   const HEADER_HEIGHT = 45
   const { getAlbumDataDispatch } = props;
   const { currentAlbum: currentAlbumImmutable, enterLoading } = props;
+  const { songsCount } = props;
   useEffect(() => {
     getAlbumDataDispatch(id);
   }, [getAlbumDataDispatch, id]);
@@ -99,7 +100,7 @@ function Album(props) {
       unmountOnExit
       onExited={props.history.goBack} /* 在退出动画执行结束时跳转路由 */
     >
-      <Container>
+      <Container play={songsCount.size}>
         <Header ref={headerEl} title={title} handleClick={handleBack} isMarquee={isMarquee}></Header>
         {!isEmptyObject(currentAlbum) ? (
           <Scroll bounceTop={false} onScroll={handleScroll}>
@@ -121,6 +122,7 @@ function Album(props) {
 const mapStateToProps = (state) => ({
   currentAlbum: state.getIn(['album', 'currentAlbum']),
   enterLoading: state.getIn(['album', 'enterLoading']),
+  songsCount: state.getIn(['player', 'playList']),
 })
 const mapDispatchToProps = (dispatch) => {
   return {

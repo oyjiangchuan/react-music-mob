@@ -20,15 +20,7 @@ import {
 } from './store/actionCreator';
 
 function Singers(props) {
-    //mock 数据
-    /* const singerList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(item => {
-        return {
-            picUrl: "https://p2.music.126.net/uTwOm8AEFFX_BYHvfvFcmQ==/109951164232057952.jpg",
-            name: "隔壁老樊",
-            accountId: 277313426,
-        }
-    }); */
-
+    const { songsCount } = props;
     const { singerList, pullUpLoading, pullDownLoading, pageCount, category, alpha } = props;
     const { getHotSingerDispatch, updateCatecory, updateAlpha, pullUpRefreshDispatch, pullDownRefreshDispatch } = props;
 
@@ -90,7 +82,7 @@ function Singers(props) {
                 <Horizen list={categoryTypes} title={"分类 (默认热门):"} handleClick={val => handleUpdateCatetory(val)} oldVal={category}></Horizen>
                 <Horizen list={alphaTypes} title={"首字母:"} handleClick={val => handleUpdateAlpha(val)} oldVal={alpha}></Horizen>
             </NavContainer>
-            <ListContainer>
+            <ListContainer play={songsCount.size}>
                 <Scroll onScroll={forceCheck}
                     pullUp={handlePullUp}
                     pullDown={handlePullDown}
@@ -112,6 +104,7 @@ const mapStateToProps = (state) => ({
     pageCount: state.getIn(['singers', 'pageCount']),
     category: state.getIn(['singers', 'category']),
     alpha: state.getIn(['singers', 'alpha']),
+    songsCount: state.getIn(['player', 'playList']),
 })
 
 const mapDispatchToProps = (dispatch) => {

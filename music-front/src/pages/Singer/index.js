@@ -12,6 +12,7 @@ import { getSingerInfo, changeEnterLoading } from './store/actionCreators';
 
 function Singer(props) {
   const [showStatus, setShowStatus] = useState(true);
+  const { songsCount } = props;
   const {
     artist: immutableArtist,
     songs: immutableSongs,
@@ -105,7 +106,7 @@ function Singer(props) {
       unmountOnExit
       onExited={() => props.history.goBack()}
     >
-      <Container>
+      <Container play={songsCount.size}>
         <Header
           handleClick={setShowStatusFalse}
           title={artist.name}
@@ -120,8 +121,9 @@ function Singer(props) {
         </CollectButton>
         <BgLayer ref={layer}></BgLayer>
         <SongListWrapper ref={songScrollWrapper}>
-          <Scroll ref={songScroll} onScroll={handleScroll} musicAnimation={musicAnimation}>
+          <Scroll ref={songScroll} onScroll={handleScroll}>
             <SongList
+              musicAnimation={musicAnimation}
               songs={songs}
               showCollect={false}>
             </SongList>
@@ -137,7 +139,8 @@ function Singer(props) {
 const mapStateToProps = state => ({
   artist: state.getIn(["singerInfo", "artist"]),
   songs: state.getIn(["singerInfo", "songsOfArtist"]),
-  loading: state.getIn(["singerInfo", "loading"])
+  loading: state.getIn(["singerInfo", "loading"]),
+  songsCount: state.getIn(["player", "playList"]),
 })
 
 const mapDispatchToProps = dispatch => {

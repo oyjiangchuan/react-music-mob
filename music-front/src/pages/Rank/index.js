@@ -8,6 +8,7 @@ import Loading from '../../baseUI/loading/index';
 import { renderRoutes } from 'react-router-config';
 
 function Rank(props) {
+    const { songsCount } = props;
     const { rankList: list, loading } = props;
     const { getRankListDataDispatch } = props;
     let rankList = list ? list.toJS() : [];
@@ -65,7 +66,7 @@ function Rank(props) {
     let displayStyle = loading ? { "display": "none" } : { "display": "" };
 
     return (
-        <Container>
+        <Container play={songsCount.size}>
             <Scroll>
                 <div>
                     <h1 className="offical" style={displayStyle}> 官方榜 </h1>
@@ -84,6 +85,7 @@ function Rank(props) {
 const mapStateToProps = (state) => ({
     rankList: state.getIn(['rank', 'rankList']),
     loading: state.getIn(['rank', 'loading']),
+    songsCount: state.getIn(['player', 'playList']),
 });
 // 映射 dispatch 到 props 上
 const mapDispatchToProps = (dispatch) => {
