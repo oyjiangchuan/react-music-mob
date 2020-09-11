@@ -56,7 +56,7 @@ const handleInsertSong = (state, song) => {
 const handleDeleteSong = (state, song) => {
   // 也可用 loadsh 库的 deepClone 方法。这里深拷贝是基于纯函数的考虑，不对参数 state 做修改
   const playList = JSON.parse(JSON.stringify(state.get('playList').toJS()));
-  const sequenceList = JSON.parse(JSON.stringify(state.get('sequenceList').toJS()));
+  const sequenceList = JSON.parse(JSON.stringify(state.get('sequencePlayList').toJS()));
   let currentIndex = state.get('currentIndex');
   // 找对应歌曲在播放列表中的索引
   const fpIndex = findIndex(song, playList);
@@ -68,7 +68,6 @@ const handleDeleteSong = (state, song) => {
   // 在 sequenceList 中直接删除歌曲即可
   const fsIndex = findIndex(song, sequenceList);
   sequenceList.splice(fsIndex, 1);
-
   return state.merge({
     'playList': fromJS(playList),
     'sequencePlayList': fromJS(sequenceList),

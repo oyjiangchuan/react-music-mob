@@ -186,7 +186,7 @@ function Player(props) {
       }
       <audio ref={audioRef} onTimeUpdate={updateTime} onEnded={handleEnd} onError={handleError}></audio>
       <Toast ref={toastRef} text={modeText}></Toast>
-      <PlayList></PlayList>
+      <PlayList clearPreSong={() => setPreSong({})}></PlayList>
     </div>
   )
 }
