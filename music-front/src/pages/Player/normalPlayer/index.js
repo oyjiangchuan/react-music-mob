@@ -19,7 +19,7 @@ function NormalPlayer(props) {
   const normalPlayerRef = useRef();
   const cdWrapperRef = useRef();
   const { song, fullScreen, playing, percent, duration, currentTime, mode } = props;
-  const { toggleFullScreen, clickPlaying, onProgressChange, handlePrev, handleNext, changeMode } = props;
+  const { toggleFullScreen, togglePlayList, clickPlaying, onProgressChange, handlePrev, handleNext, changeMode } = props;
   const transform = prefixStyle("transform");
   // 启用帧动画
   const enter = () => {
@@ -156,7 +156,7 @@ function NormalPlayer(props) {
             <div className="icon i-right" onClick={handleNext}>
               <i className="iconfont">&#xe718;</i>
             </div>
-            <div className="icon i-right">
+            <div className="icon i-right" onClick={() => togglePlayList(true)}>
               <i className="iconfont">&#xe640;</i>
             </div>
           </Operators>

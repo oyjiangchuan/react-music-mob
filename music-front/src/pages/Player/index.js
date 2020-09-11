@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import MiniPlayer from './miniPlayer/index';
 import NormalPlayer from './normalPlayer/index';
+import PlayList from './playList/index';
 import { getSongUrl, isEmptyObject, findIndex, shuffle } from '../../api/utils';
 import {
   changeCurrentSong,
@@ -17,7 +18,7 @@ import { playMode } from '../../api/config';
 
 function Player(props) {
   const { fullScreen, playing, currentIndex, currentSong: immutableCurrentSong, playList: immutablePlayList, mode, sequencePlayList: immutableSequencePlayList } = props;
-  const { toggleFullScreenDispatch, togglePlayingDispatch, changeCurrentIndexDispatch, changeCurrentDispatch, changeModeDispatch, changePlayListDispatch } = props;
+  const { toggleFullScreenDispatch, togglePlayingDispatch, togglePlayListDispatch, changeCurrentIndexDispatch, changeCurrentDispatch, changeModeDispatch, changePlayListDispatch } = props;
   const currentSong = immutableCurrentSong.toJS();
   const playList = immutablePlayList.toJS();
   const sequencePlayList = immutableSequencePlayList.toJS();
@@ -161,6 +162,7 @@ function Player(props) {
           fullScreen={fullScreen}
           playing={playing}
           toggleFullScreen={toggleFullScreenDispatch}
+          togglePlayList={togglePlayListDispatch}
           clickPlaying={clickPlaying}
         />
       }
@@ -171,6 +173,7 @@ function Player(props) {
           fullScreen={fullScreen}
           playing={playing}
           toggleFullScreen={toggleFullScreenDispatch}
+          togglePlayList={togglePlayListDispatch}
           clickPlaying={clickPlaying}
           duration={duration}//总时长
           currentTime={currentTime}//播放时间
@@ -183,6 +186,7 @@ function Player(props) {
       }
       <audio ref={audioRef} onTimeUpdate={updateTime} onEnded={handleEnd} onError={handleError}></audio>
       <Toast ref={toastRef} text={modeText}></Toast>
+      <PlayList></PlayList>
     </div>
   )
 }
