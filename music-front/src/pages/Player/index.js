@@ -4,6 +4,7 @@ import MiniPlayer from './miniPlayer/index';
 import NormalPlayer from './normalPlayer/index';
 import PlayList from './playList/index';
 import { getSongUrl, isEmptyObject, findIndex, shuffle } from '../../api/utils';
+import { getLyricRequest } from '../../api/request';
 import {
   changeCurrentSong,
   changeCurrentIndex,
@@ -34,11 +35,12 @@ function Player(props) {
   let percent = isNaN(currentTime / duration) ? 0 : currentTime / duration;
   const audioRef = useRef();
   const toastRef = useRef();
+  const currentLyric = useRef(); // 歌词
   // 播放暂停按钮
   const clickPlaying = (e, state) => {
     e.stopPropagation();
     togglePlayingDispatch(state);
-  }
+  };
   // 根据时间进度条的百分比计算需要当前播放的时间
   const onProgressChange = (curPercent) => {
     const newTime = curPercent * duration;
@@ -47,7 +49,7 @@ function Player(props) {
     if (!playing) {
       togglePlayingDispatch(true);
     }
-  }
+  };
   // 更新当前的播放时间 通过audio标签的onTimeUpdate
   const updateTime = e => {
     setCurrentTime(e.target.currentTime);
@@ -57,7 +59,7 @@ function Player(props) {
     audioRef.current.currentTime = 0;
     changePlayingState(true);
     audioRef.current.play();
-  }
+  };
   // 上一曲
   const handlePrev = () => {
     // 播放列表只有一首歌时单曲循环
@@ -69,7 +71,7 @@ function Player(props) {
     if (index < 0) index = playList.length -1;
     if (!playing) togglePlayingDispatch(true);
     changeCurrentIndexDispatch(index);
-  }
+  };
   // 下一曲
   const handleNext = () => {
     // 播放列表只有一首歌时单曲循环
@@ -81,7 +83,7 @@ function Player(props) {
     if (index === playList.length) index = 0;
     if (!playing) togglePlayingDispatch(true);
     changeCurrentIndexDispatch(index);
-  }
+  };
   // 改变播放模式
   const changeMode = () => {
     let newMode = (mode + 1) % 3;
@@ -105,7 +107,7 @@ function Player(props) {
     }
     changeModeDispatch(newMode);
     toastRef.current.show(); // 拿到子组件ref的方法进行调用
-  }
+  };
   // 歌曲播放完之后的处理
   const handleEnd = () => {
     if (mode === playMode.loop) {
@@ -113,12 +115,27 @@ function Player(props) {
     } else {
       handleNext();
     }
-  }
+  };
   // 歌曲播放出错异常处理
   const handleError = () => {
     songReady.current = true;
     alert("播放出错")
-  }
+  };
+  // 根据当前歌曲的id获取歌词信息
+  const getLyrci = (id) => {
+    let lyric = "";
+    getLyricRequest(id).then(data => {
+      console.log(data);
+      lyric = data.lrc.lyric;
+      if (!lyric) {
+        currentLyric.current = null;
+        return;
+      }
+    }).catch(() => {
+      songReady.current = true;
+      audioRef.current.play();
+    });
+  };
   
   useEffect(() => {
     if (
@@ -142,6 +159,7 @@ function Player(props) {
       });
     });
     togglePlayingDispatch(true);//播放状态
+    getLyric(current.id);// 根据当前歌曲的id获取歌词
     setCurrentTime(0);//从头开始播放
     setDuration((current.dt / 1000) | 0);//时长 |0表示向下取整(位运算符)
     // eslint-disable-next-line
