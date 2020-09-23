@@ -27,8 +27,10 @@ export default class Lyric {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i]; // 如"[00:01.997] 作曲：薛之谦"
       let result = timeExp.exec(line);
+      console.log(result);
       if(!result) continue;
       const txt = line.replace(timeExp, '').trim(); // 把时间戳去掉 只剩下歌词文本
+      console.log(txt);
       if(txt) {
         if(result[3].length === 3) {
           result[3] = result[3]/10; //[00:01.997] 中匹配到的 997 就会被切成 99

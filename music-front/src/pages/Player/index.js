@@ -4,6 +4,7 @@ import MiniPlayer from './miniPlayer/index';
 import NormalPlayer from './normalPlayer/index';
 import PlayList from './playList/index';
 import { getSongUrl, isEmptyObject, findIndex, shuffle } from '../../api/utils';
+import Lyric from '../../plugin/lyric-parser'
 import { getLyricRequest } from '../../api/request';
 import {
   changeCurrentSong,
@@ -31,15 +32,22 @@ function Player(props) {
   const [currentTime, setCurrentTime] = useState(0);
   //歌曲总时长
   const [duration, setDuration] = useState(0);
+  // 即时的歌词
+  const [currentPlayingLyric, setPlayingLyric] = useState("");
   //歌曲播放进度
   let percent = isNaN(currentTime / duration) ? 0 : currentTime / duration;
   const audioRef = useRef();
   const toastRef = useRef();
   const currentLyric = useRef(); // 歌词
+  const currentLineNum = useRef(0); // 当前歌词的行数
   // 播放暂停按钮
   const clickPlaying = (e, state) => {
     e.stopPropagation();
     togglePlayingDispatch(state);
+    // 歌词随着歌曲的暂停/播放改变
+    if (currentLyric.current) {
+      currentLyric.current.togglePlay(currentTime*1000);
+    }
   };
   // 根据时间进度条的百分比计算需要当前播放的时间
   const onProgressChange = (curPercent) => {
@@ -48,6 +56,10 @@ function Player(props) {
     audioRef.current.currentTime = newTime;
     if (!playing) {
       togglePlayingDispatch(true);
+    }
+    // 歌词随着歌曲的进度进行改变
+    if (currentLyric.current) {
+      currentLyric.current.seek(newTime*1000);
     }
   };
   // 更新当前的播放时间 通过audio标签的onTimeUpdate
@@ -122,8 +134,12 @@ function Player(props) {
     alert("播放出错")
   };
   // 根据当前歌曲的id获取歌词信息
-  const getLyrci = (id) => {
+  const getLyric = (id) => {
     let lyric = "";
+    if(currentLyric.current) {
+      currentLyric.current.stop();
+    }
+    // 避免songReady恒为false的情况
     getLyricRequest(id).then(data => {
       console.log(data);
       lyric = data.lrc.lyric;
@@ -131,12 +147,21 @@ function Player(props) {
         currentLyric.current = null;
         return;
       }
+      currentLyric.current = new Lyric(lyric, handleLyric);
+      currentLyric.current.play();
+      currentLineNum.current = 0;
+      currentLyric.current.seek(0);
     }).catch(() => {
       songReady.current = true;
       audioRef.current.play();
     });
   };
-  
+  // 歌词插件的回调函数
+  const handleLyric = ({lineNum, txt}) => {
+    if(!currentLyric.current) return;
+    currentLineNum.current = lineNum;
+    setPlayingLyric(txt);
+  }
   useEffect(() => {
     if (
       !playList.length ||
@@ -200,6 +225,9 @@ function Player(props) {
           changeMode={changeMode}
           handlePrev={handlePrev}
           handleNext={handleNext}
+          currentLyric={currentLyric.current}
+          currentPlayingLyric={currentPlayingLyric}
+          currentLineNum={currentLineNum.current}
         />
       }
       <audio ref={audioRef} onTimeUpdate={updateTime} onEnded={handleEnd} onError={handleError}></audio>

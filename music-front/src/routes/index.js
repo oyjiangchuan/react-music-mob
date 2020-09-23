@@ -6,6 +6,7 @@ import Singers from '../pages/Singers/index';
 import Singer from '../pages/Singer/index';
 import Rank from '../pages/Rank/index';
 import Album from '../pages/Album/index';
+import Search from '../pages/Search/index';
 export default [
   {
     path: "/",
@@ -47,6 +48,18 @@ export default [
             component: Album
           }
         ]
+      },
+      {
+        path: "/album/:id",
+        exact: true,
+        key: "album",
+        component: Album
+      },
+      {
+        path: "/search",
+        exact: true, // 精准匹配?
+        key: "search",
+        component: Search
       }
     ]
   }

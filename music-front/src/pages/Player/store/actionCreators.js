@@ -67,7 +67,6 @@ export const getSongDetail = (id) => {
   return (dispatch) => {
     getSongDetailRequest(id).then(data => {
       let song = data.songs[0];
-      console.log(song)
       dispatch(insertSong(song));
     })
   }

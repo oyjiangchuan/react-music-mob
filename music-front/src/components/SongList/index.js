@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React /* { useState, useEffect } */ from "react";
 import { SongList, SongItem } from "./style";
 import { getName } from "../../api/utils";
 import { changePlayList, changeCurrentIndex, changeSequecePlayList } from "../../pages/Player/store/actionCreators";
@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 
 const SongsList = React.forwardRef((props, refs) => {
 
-  const [startIndex, setStartIndex] = useState(0);
+  // const [startIndex, setStartIndex] = useState(0);
 
-  const { collectCount, showCollect, songs, loading=false} = props;
+  const { collectCount, showCollect, songs, /* loading=false */} = props;
 
   const { changePlayListDispatch, changeCurrentIndexDispatch, changeSequecePlayListDispatch } = props;
 
