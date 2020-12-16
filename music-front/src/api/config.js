@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const baseURL = 'http://localhost:4000'
+export const baseURL =  process.env.NODE_ENV === 'development' ? 'https://api.mtnhao.com/' : '/api'
 
 //axios 的实例及拦截器配置
 const axiosInstance = axios.create({
